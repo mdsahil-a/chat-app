@@ -1,0 +1,1316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard</title>
+  <link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+/>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Karla:ital,wght@0,200..800;1,200..800&family=Playwrite+AU+QLD:wght@100..400&display=swap');
+    
+    * {
+      margin: 0;
+      padding: 0;
+      font-family: "Karla", sans-serif;
+    }
+
+    body {
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+      transition: background 0.5s ease;
+    }
+
+    /* Home page - background image */
+    body.home-active {
+      background-image: url('../../public/bg2.jpg');
+      background-position: center;
+      background-size: cover;
+      background-repeat: no-repeat;
+    }
+
+    /* Chat page - Deep blue/purple gradient (calming, focused, promotes communication) */
+    body.chat-active {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #667eea 100%);
+      background-size: 200% 200%;
+      animation: gradientShift 8s ease infinite;
+    }
+
+    /* Notification page - Warm pink/coral gradient (attention-grabbing, friendly, energetic) */
+    body.notification-active {
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 50%, #f093fb 100%);
+      background-size: 200% 200%;
+      animation: gradientShift 8s ease infinite;
+    }
+
+    /* Settings page - Deep blue/cyan gradient (professional, trustworthy, calm) */
+    body.setting-active {
+      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 50%, #667eea 100%);
+      background-size: 200% 200%;
+      animation: gradientShift 8s ease infinite;
+    }
+
+    @keyframes gradientShift {
+      0% {
+        background-position: 0% 50%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+    .logoutPage {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 20rem;
+      padding: 2rem;
+      background-color: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(15px);
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.6);
+      z-index: 999999;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+      color: white;
+    }
+
+    .logoutPage span {
+      font-size: 18px;
+      text-align: center;
+    }
+
+    .logoutButtons {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .logoutButtons button {
+      width: 5rem;
+      height: 2rem;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      border: none;
+      transition: all 0.3s;
+    }
+
+    #logoutYes {
+      background: linear-gradient(to right, #ff6b6b, #ee5a6f);
+      color: white;
+    }
+
+    #logoutYes:hover {
+      box-shadow: 2px 0 10px #ee5a6f;
+    }
+
+    #logoutNo {
+      background: linear-gradient(to right, #4facfe, #00f2fe);
+      color: black;
+    }
+
+    #logoutNo:hover {
+      box-shadow: 2px 0 10px #00f2fe;
+    }
+
+    .navBar {
+      width: 70px;
+      background: linear-gradient(180deg, rgba(13, 15, 36, 0.9), rgba(19, 26, 48, 0.9));
+      backdrop-filter: blur(15px);
+      border-right: 2px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 4px 0 18px rgba(0, 0, 0, 0.35);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 1.25rem 0;
+      gap: 1rem;
+      height: 100vh;
+      z-index: 10;
+    }
+
+    #authorImage {
+      height: 2.5rem;
+      width: 2.5rem;
+      border-radius: 50%;
+      object-fit: cover;
+      cursor: pointer;
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      transition: all 0.3s;
+    }
+
+    #authorImage:hover {
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+      transform: scale(1.1);
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s;
+      color: white;
+      position: relative;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .nav-item i {
+      font-size: 22px;
+      color: white;
+    }
+
+    .nav-item:hover {
+      background-color: rgba(255, 255, 255, 0.15);
+      transform: scale(1.05);
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
+    }
+
+    .nav-item.active {
+      background: linear-gradient(to right, #6a85f1, #4fc3f7);
+      box-shadow: 0 6px 18px rgba(79, 195, 247, 0.35);
+    }
+
+    .noti-badge {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      background: linear-gradient(to right, #ff6b6b, #ee5a6f);
+      color: white;
+      border-radius: 50%;
+      width: 18px;
+      height: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: bold;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .wrapper {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 1rem;
+      overflow: hidden;
+    }
+
+    .page {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .home {
+      justify-content: flex-start;
+      align-items: center;
+      gap: 2rem;
+      padding-top: 2rem;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      align-self: flex-start;
+      padding: 1rem 1.5rem;
+      margin-left: 1rem;
+      margin-top: 1rem;
+      background-color: rgba(255, 255, 255, 0.04);
+      backdrop-filter: blur(15px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 14px;
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.25);
+      transition: all 0.3s;
+      gap: 0.75rem;
+    }
+
+    .logo:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 22px rgba(79, 172, 254, 0.35);
+      border-color: rgba(79, 172, 254, 0.25);
+    }
+
+    #logoImage {
+      height: 4.25rem;
+      width: auto;
+      object-fit: contain;
+      filter: drop-shadow(0 3px 10px rgba(0, 0, 0, 0.25));
+    }
+
+    .introDiv {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 3rem;
+      flex-wrap: wrap;
+      margin-top: 1rem;
+    }
+
+    .about {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1.5rem;
+      padding: 2rem;
+      width: 25rem;
+      background-color: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(15px);
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.6);
+      color: white;
+      animation: float 5s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .about h1 {
+      font-family: "Playwrite AU QLD";
+      font-size: 30px;
+      background-image: linear-gradient(to right, blue, red);
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 15px 5px rgba(97, 87, 87, 0.3);
+    }
+
+    .about span {
+      text-align: center;
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .buttons button {
+      width: 7rem;
+      height: 2.5rem;
+      border-radius: 12px;
+      border: none;
+      background: linear-gradient(to right, #4facfe, #00f2fe);
+      color: black;
+      font-size: 17px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .buttons button:hover {
+      box-shadow: 2px 0 10px #00f2fe;
+      transform: translateY(-2px);
+    }
+
+    #messageImage {
+      height: 15rem;
+      animation: float 3s ease-in-out infinite;
+      animation-direction: reverse;
+    }
+
+    .chat {
+      display: flex;
+      gap: 1rem;
+      height: 100%;
+    }
+
+    .userPage {
+      width: 20rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      background-color: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(15px);
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      padding: 1rem;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.6);
+    }
+
+    .searchSection {
+      position: relative;
+      width: 100%;
+    }
+
+    #search {
+      width: 100%;
+      height: 2.5rem;
+      border-radius: 22px;
+      padding-left: 1rem;
+      background-color: rgba(255, 255, 255, 0.1);
+      color: white;
+      outline: none;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      font-size: 16px;
+    }
+
+    #search::placeholder {
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .result {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      width: 100%;
+      max-height: 20rem;
+      margin-top: 0.5rem;
+      display: flex;
+      flex-direction: column;
+      overflow: auto;
+      z-index: 999;
+      border-radius: 10px;
+      background-color: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(15px);
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+      scrollbar-width: thin;
+    }
+
+    .peoples {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      color: white;
+    }
+
+    .peopleDetails {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .peopleDetails img {
+      height: 2.5rem;
+      width: 2.5rem;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    #sendMessage {
+      width: 5rem;
+      height: 2rem;
+      border-radius: 12px;
+      border: none;
+      background: linear-gradient(to right, #4facfe, #00f2fe);
+      color: black;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    #sendMessage:hover {
+      box-shadow: 2px 0 10px #00f2fe;
+    }
+
+    .friendCard {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    #friendHeading {
+      font-size: 25px;
+      color: white;
+      margin-bottom: 1rem;
+      font-family: "Playwrite AU QLD";
+      background-image: linear-gradient(to right, blue, red);
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .friendWrapper {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      scrollbar-width: thin;
+      gap: 0.5rem;
+    }
+
+    .friend {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.75rem;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.3s;
+      background-color: rgba(255, 255, 255, 0.05);
+    }
+
+    .friend:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+      transform: translateX(5px);
+    }
+
+    .friendDetails {
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+    }
+
+    #friendImage, #userPic {
+      height: 3.5rem;
+      width: 3.5rem;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .friendInfo {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    #friendName {
+      font-size: 16px;
+      font-weight: bold;
+      color: white;
+    }
+
+    #friendRecentMessage {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    #friendMessageDate {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .chatBox {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background-color: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(15px);
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.6);
+      overflow: hidden;
+    }
+
+    .chatNav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem;
+      border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .userDetails {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .userInfo {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    #userName {
+      font-size: 18px;
+      font-weight: bold;
+      color: white;
+    }
+
+    #status {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .options {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .options span {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: 10px;
+      color: white;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .options span:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+      transform: scale(1.1);
+    }
+
+    .messageDiv {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      overflow-y: auto;
+      padding: 1rem;
+      gap: 1rem;
+      scrollbar-width: thin;
+    }
+
+    .sender, .reciever {
+      display: flex;
+      flex-direction: column;
+      max-width: 70%;
+    }
+
+    .sender {
+      align-items: flex-end;
+      align-self: flex-end;
+    }
+
+    .reciever {
+      align-items: flex-start;
+      align-self: flex-start;
+    }
+
+    #sender {
+      background: linear-gradient(to right, #4facfe, #00f2fe);
+      color: black;
+      padding: 0.75rem 1rem;
+      border-radius: 15px;
+      border-bottom-right-radius: 5px;
+      font-size: 15px;
+      word-wrap: break-word;
+    }
+
+    #reciever {
+      background-color: rgba(255, 255, 255, 0.2);
+      color: white;
+      padding: 0.75rem 1rem;
+      border-radius: 15px;
+      border-bottom-left-radius: 5px;
+      font-size: 15px;
+      word-wrap: break-word;
+    }
+
+    #senderDate, #recieverDate {
+      font-size: 10px;
+      color: rgba(255, 255, 255, 0.6);
+      margin-top: 0.25rem;
+      padding: 0 0.5rem;
+    }
+
+    .inputDiv {
+      display: flex;
+      padding: 1rem;
+      gap: 0.5rem;
+      border-top: 2px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .inputMessage {
+      flex: 1;
+      height: 2.5rem;
+      border-radius: 22px;
+      padding-left: 1rem;
+      background-color: rgba(255, 255, 255, 0.1);
+      color: white;
+      outline: none;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      font-size: 16px;
+    }
+
+    .inputMessage::placeholder {
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .send {
+      width: 3rem;
+      height: 2.5rem;
+      border-radius: 12px;
+      border: none;
+      background: linear-gradient(to right, #4facfe, #00f2fe);
+      color: black;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .send:hover {
+      box-shadow: 2px 0 10px #00f2fe;
+      transform: scale(1.05);
+    }
+
+    .notification {
+      display: flex;
+      flex-direction: column;
+      padding: 1rem;
+      overflow-y: auto;
+    }
+
+    .noti_header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      padding-bottom: 1rem;
+      border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .noti_header h2 {
+      font-family: "Playwrite AU QLD";
+      font-size: 24px;
+      background-image: linear-gradient(to right, blue, red);
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .clear_all_btn {
+      padding: 0.5rem 1rem;
+      border-radius: 12px;
+      border: none;
+      background: linear-gradient(to right, #ff6b6b, #ee5a6f);
+      color: white;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .clear_all_btn:hover {
+      box-shadow: 2px 0 10px #ee5a6f;
+      transform: translateY(-2px);
+    }
+
+    .noti_list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .noti_empty {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem;
+      color: rgba(255, 255, 255, 0.6);
+      text-align: center;
+    }
+
+    .noti_empty i {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      opacity: 0.5;
+    }
+
+    .noti_card {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem;
+      background-color: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(15px);
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.6);
+      transition: all 0.3s;
+      color: white;
+      position: relative;
+    }
+
+    .noti_card:hover {
+      transform: translateX(5px);
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .noti_card img {
+      height: 3rem;
+      width: 3rem;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .noti_details {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .noti_user_name {
+      font-weight: bold;
+      font-size: 16px;
+      color: white;
+    }
+
+    .noti_message_text {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    .noti_date {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .noti_delete {
+      padding: 0.5rem;
+      background-color: rgba(255, 0, 0, 0.2);
+      border: none;
+      border-radius: 8px;
+      color: white;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .noti_delete:hover {
+      background-color: rgba(255, 0, 0, 0.4);
+      transform: scale(1.1);
+    }
+
+    .settings {
+      display: flex;
+      flex-direction: column;
+      padding: 1rem;
+      overflow-y: auto;
+      gap: 1.5rem;
+    }
+
+    .settings_header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding-bottom: 1rem;
+      border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .settings_header h2 {
+      font-family: "Playwrite AU QLD";
+      font-size: 28px;
+      background-image: linear-gradient(to right, blue, red);
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .settings_section {
+      background-color: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(15px);
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      padding: 1.5rem;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.6);
+    }
+
+    .settings_section h3 {
+      font-size: 18px;
+      color: white;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .settings_section h3 i {
+      font-size: 16px;
+    }
+
+    .setting_item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .setting_item:last-child {
+      border-bottom: none;
+    }
+
+    .setting_label {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .setting_label span:first-child {
+      font-weight: bold;
+      color: white;
+      font-size: 15px;
+    }
+
+    .setting_label span:last-child {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .toggle_switch {
+      position: relative;
+      width: 50px;
+      height: 26px;
+    }
+
+    .toggle_switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(255, 255, 255, 0.2);
+      transition: 0.3s;
+      border-radius: 26px;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 20px;
+      width: 20px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: 0.3s;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider {
+      background: linear-gradient(to right, #4facfe, #00f2fe);
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(24px);
+    }
+
+    .setting_select {
+      padding: 0.5rem 1rem;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      background-color: rgba(255, 255, 255, 0.1);
+      color: white;
+      font-size: 14px;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .setting_select option {
+      background-color: rgba(0, 0, 0, 0.9);
+      color: white;
+    }
+
+    .setting_button {
+      padding: 0.75rem 1.5rem;
+      border-radius: 12px;
+      border: none;
+      background: linear-gradient(to right, #4facfe, #00f2fe);
+      color: black;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .setting_button:hover {
+      box-shadow: 2px 0 10px #00f2fe;
+      transform: translateY(-2px);
+    }
+
+    .setting_button.danger {
+      background: linear-gradient(to right, #ff6b6b, #ee5a6f);
+      color: white;
+    }
+
+    .setting_button.danger:hover {
+      box-shadow: 2px 0 10px #ee5a6f;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .hide {
+      display: none !important;
+    }
+
+    @media (max-width: 768px) {
+      body {
+        flex-direction: column;
+      }
+
+      .navBar {
+        width: 100%;
+        height: auto;
+        flex-direction: row;
+        padding: 0.5rem;
+        justify-content: space-around;
+        border-right: none;
+        border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .nav-item {
+        width: 40px;
+        height: 40px;
+      }
+
+      .wrapper {
+        padding: 0.5rem;
+        height: calc(100vh - 60px);
+      }
+
+      .introDiv {
+        flex-direction: column;
+        gap: 2rem;
+      }
+
+      .about {
+        width: 90%;
+        max-width: 20rem;
+      }
+
+      #messageImage {
+        height: 8rem;
+      }
+
+      .logo {
+        padding: 1rem 1.25rem;
+        margin-left: 0.75rem;
+      }
+
+      #logoImage {
+        height: 3.75rem;
+      }
+
+      .chat {
+        flex-direction: column;
+        height: 100%;
+      }
+
+      .userPage {
+        width: 100%;
+        height: 40%;
+        min-height: 200px;
+      }
+
+      .chatBox {
+        height: 60%;
+        min-height: 300px;
+      }
+
+      .logoutPage {
+        width: 90%;
+        max-width: 18rem;
+      }
+
+      .sender, .reciever {
+        max-width: 85%;
+      }
+    }
+
+    @media (max-width: 568px) {
+      .about {
+        width: 95%;
+        padding: 1.5rem;
+      }
+
+      .about h1 {
+        font-size: 24px;
+      }
+
+      .about span {
+        font-size: 14px;
+      }
+
+      .buttons button {
+        width: 6rem;
+        height: 2rem;
+        font-size: 14px;
+      }
+
+      #messageImage {
+        height: 6rem;
+      }
+
+      .logo {
+        padding: 1rem;
+      }
+
+      #logoImage {
+        height: 3.25rem;
+      }
+
+      .userPage {
+        height: 35%;
+      }
+
+      .chatBox {
+        height: 65%;
+      }
+
+      .sender, .reciever {
+        max-width: 90%;
+      }
+
+      #sender, #reciever {
+        font-size: 14px;
+        padding: 0.5rem 0.75rem;
+      }
+
+      .settings {
+        padding: 0.5rem;
+      }
+
+      .settings_section {
+        padding: 1rem;
+      }
+
+      .setting_item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+      }
+
+      .setting_label {
+        width: 100%;
+      }
+
+      .noti_header {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+      }
+
+      .clear_all_btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="logoutPage hidden">
+    <span>Are you sure to logout?</span>
+    <div class="logoutButtons">
+      <button id="logoutYes">Yes</button>
+      <button id="logoutNo">No</button>
+    </div>
+  </div>
+
+  <nav class="navBar">
+    <img src="../../public/avatar.jpeg" alt="" id="authorImage">
+    <div class="nav-item" data-page="home"> <i class="fa-solid fa-house"></i> </div>
+    <div data-page="chat" class="nav-item chat-icon" onclick="showPeoples()"> <i class="fa-solid fa-comment"></i> </div>
+    <div data-page="notification" class="nav-item"> <i class="fa-solid fa-bell"> </i><span class="noti-badge hidden" id="notiBadge">0</span></div>
+    <div data-page="setting" class="nav-item"> <i class="fa-solid fa-gear"></i> </div>
+    <div data-page="logout" class="nav-item logout"> <i class="fa-solid fa-arrow-right-from-bracket"></i> </div>
+  </nav> 
+
+  <div class="wrapper">
+    <div class="home page" id="home">
+      <div class="logo">
+        <img src="../../public/logo.png" id="logoImage" alt="">
+      </div>
+      <div class="introDiv">
+        <div class="about">
+          <h1>Flow Talk</h1>
+          <span>Connect. Chat. Share. Stay close to your friends and communities with fast, real-time messaging — anytime, anywhere.</span>
+          <div class="buttons">
+            <button>Chat</button>
+            <button>Explore</button>
+          </div>
+        </div>
+        <img src="../../public/message.png" id="messageImage" alt="">
+      </div>
+    </div>
+
+    <div class="chat page hidden" id="chat">
+      <div class="userPage page">
+        <div class="searchSection">
+          <input type="text" placeholder="Search" id="search">
+          <div class="result"></div>
+        </div>
+        <div class="friendCard">
+          <h1 id="friendHeading">Peoples</h1>
+          <div class="friendWrapper"></div>
+        </div>
+      </div>
+      <div class="chatBox hide"></div>
+    </div>
+
+    <div class="notification page hidden" id="notification">
+      <div class="noti_header">
+        <h2>Notifications</h2>
+        <button class="clear_all_btn" onclick="clearAllNotifications()">Clear All</button>
+      </div>
+      <div class="noti_list" id="notiList">
+        <div class="noti_empty">
+          <i class="fa-solid fa-bell-slash"></i>
+          <span>No notifications yet</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="settings page hidden" id="setting">
+      <div class="settings_header">
+        <h2>Settings</h2>
+      </div>
+      
+      <div class="settings_section">
+        <h3><i class="fa-solid fa-palette"></i> Appearance</h3>
+        <div class="setting_item">
+          <div class="setting_label">
+            <span>Dark Mode</span>
+            <span>Enable dark theme</span>
+          </div>
+          <label class="toggle_switch">
+            <input type="checkbox" id="darkModeToggle" onchange="toggleDarkMode()">
+            <span class="slider"></span>
+          </label>
+        </div>
+        <div class="setting_item">
+          <div class="setting_label">
+            <span>Theme Color</span>
+            <span>Choose your preferred color</span>
+          </div>
+          <select class="setting_select" id="themeColor" onchange="changeThemeColor()">
+            <option value="blue">Blue</option>
+            <option value="purple">Purple</option>
+            <option value="green">Green</option>
+            <option value="red">Red</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="settings_section">
+        <h3><i class="fa-solid fa-bell"></i> Notifications</h3>
+        <div class="setting_item">
+          <div class="setting_label">
+            <span>Push Notifications</span>
+            <span>Receive notifications when offline</span>
+          </div>
+          <label class="toggle_switch">
+            <input type="checkbox" id="pushNotifications" checked onchange="togglePushNotifications()">
+            <span class="slider"></span>
+          </label>
+        </div>
+        <div class="setting_item">
+          <div class="setting_label">
+            <span>Sound Alerts</span>
+            <span>Play sound for new messages</span>
+          </div>
+          <label class="toggle_switch">
+            <input type="checkbox" id="soundAlerts" checked onchange="toggleSoundAlerts()">
+            <span class="slider"></span>
+          </label>
+        </div>
+        <div class="setting_item">
+          <div class="setting_label">
+            <span>Email Notifications</span>
+            <span>Get notified via email</span>
+          </div>
+          <label class="toggle_switch">
+            <input type="checkbox" id="emailNotifications" onchange="toggleEmailNotifications()">
+            <span class="slider"></span>
+          </label>
+        </div>
+      </div>
+
+      <div class="settings_section">
+        <h3><i class="fa-solid fa-shield-halved"></i> Privacy</h3>
+        <div class="setting_item">
+          <div class="setting_label">
+            <span>Online Status</span>
+            <span>Show when you're online</span>
+          </div>
+          <label class="toggle_switch">
+            <input type="checkbox" id="onlineStatus" checked onchange="toggleOnlineStatus()">
+            <span class="slider"></span>
+          </label>
+        </div>
+        <div class="setting_item">
+          <div class="setting_label">
+            <span>Read Receipts</span>
+            <span>Let others know when you read messages</span>
+          </div>
+          <label class="toggle_switch">
+            <input type="checkbox" id="readReceipts" checked onchange="toggleReadReceipts()">
+            <span class="slider"></span>
+          </label>
+        </div>
+        <div class="setting_item">
+          <div class="setting_label">
+            <span>Profile Visibility</span>
+            <span>Who can see your profile</span>
+          </div>
+          <select class="setting_select" id="profileVisibility" onchange="changeProfileVisibility()">
+            <option value="public">Public</option>
+            <option value="friends">Friends Only</option>
+            <option value="private">Private</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="settings_section">
+        <h3><i class="fa-solid fa-user-gear"></i> Account</h3>
+        <div class="setting_item">
+          <div class="setting_label">
+            <span>Change Password</span>
+            <span>Update your account password</span>
+          </div>
+          <button class="setting_button" onclick="changePassword()">Change</button>
+        </div>
+        <div class="setting_item">
+          <div class="setting_label">
+            <span>Delete Account</span>
+            <span>Permanently delete your account</span>
+          </div>
+          <button class="setting_button danger" onclick="deleteAccount()">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="../js/chatPage.js"></script>
+</body>
+</html>

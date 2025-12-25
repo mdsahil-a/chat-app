@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha512-DxV+EoADOkOygM4IR9yXP8Sb2qwgidEmeqAEmDKIOfPRQZOWbXCzLC6vjbZyy0vPisbH2SyW27+ddLVCN+OMzQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Karla:ital,wght@0,200..800;1,200..800&family=Playwrite+AU+QLD:wght@100..400&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            font-family: "Karla", sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-image: url('../../public/bg2.jpg');
+            background-position: center;
+            background-size: cover;
+            background-repeat: no-repeat;
+            padding: 1rem;
+        }
+
+        .wrapper {
+            margin-top: 2rem;
+            width: 25rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 1.5rem;
+            padding: 2rem;
+            background-color: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.6);
+        }
+
+        .image_div {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .image_div img {
+            height: 10rem;
+            width: 10rem;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .names {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            width: 100%;
+            text-align: center;
+        }
+
+        #profileName {
+            font-size: 28px;
+            font-weight: bold;
+            font-family: "Playwrite AU QLD";
+            background-image: linear-gradient(to right, blue, red);
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 15px 5px rgba(97, 87, 87, 0.3);
+        }
+
+        #userName {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        #edit {
+            margin-top: 0.5rem;
+            background: linear-gradient(to right, #4facfe, #00f2fe);
+            height: 2rem;
+            width: 5rem;
+            font-size: 15px;
+            color: black;
+            border-radius: 12px;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        #edit:hover {
+            box-shadow: 2px 0 10px #00f2fe;
+            transform: translateY(-2px);
+        }
+
+        #bio {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.9);
+            text-align: center;
+            padding: 0 1rem;
+            line-height: 1.6;
+        }
+
+        .social_act {
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-around;
+            padding: 1rem 0;
+            border-top: 2px solid rgba(255, 255, 255, 0.1);
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .num_data {
+            font-size: 22px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .data {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        #follow_button {
+            width: 8rem;
+            height: 2.5rem;
+            background: linear-gradient(to right, #4facfe, #00f2fe);
+            color: black;
+            border-radius: 12px;
+            border: none;
+            font-size: 17px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        #follow_button:hover {
+            box-shadow: 2px 0 10px #00f2fe;
+            transform: translateY(-2px);
+        }
+
+        .edit_menu {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 2rem;
+            width: 22rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            align-items: center;
+            z-index: 999;
+            background-color: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.6);
+        }
+
+        #fileInput {
+            display: none;
+        }
+
+        #picUploadButton {
+            width: 100%;
+            height: 2.5rem;
+            font-size: 16px;
+            background: linear-gradient(to right, #4facfe, #00f2fe);
+            border: none;
+            color: black;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        #picUploadButton:hover {
+            box-shadow: 2px 0 10px #00f2fe;
+        }
+
+        #newUserName {
+            width: 100%;
+            height: 2.5rem;
+            padding-left: 1rem;
+            font-size: 16px;
+            border: none;
+            outline: none;
+            border-radius: 22px;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        #newUserName::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        #change_button {
+            width: 100%;
+            height: 2.5rem;
+            font-size: 17px;
+            background: linear-gradient(to right, #4facfe, #00f2fe);
+            color: black;
+            border: none;
+            border-radius: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        #change_button:hover {
+            box-shadow: 2px 0 10px #00f2fe;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        @media (max-width: 568px) {
+            body {
+                padding: 0.5rem;
+            }
+
+            .wrapper {
+                width: 90%;
+                max-width: 20rem;
+                margin-top: 1rem;
+                padding: 1.5rem;
+            }
+
+            .image_div img {
+                height: 8rem;
+                width: 8rem;
+            }
+
+            #profileName {
+                font-size: 24px;
+            }
+
+            #userName {
+                font-size: 14px;
+            }
+
+            #bio {
+                font-size: 13px;
+            }
+
+            .social_act {
+                padding: 0.75rem 0;
+            }
+
+            .num_data {
+                font-size: 20px;
+            }
+
+            .data {
+                font-size: 12px;
+            }
+
+            #follow_button {
+                width: 7rem;
+                height: 2.25rem;
+                font-size: 15px;
+            }
+
+            .edit_menu {
+                width: 90%;
+                max-width: 18rem;
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="edit_menu hidden">
+            <input type="file" id="fileInput" accept="image/*">
+            <button id="picUploadButton">Change profilepic <i class="fa-solid fa-pen"></i></button>
+            <input type="text" placeholder="Enter username" id="newUserName">
+            <button id="change_button">Change</button>
+        </div>
+
+        <div class="image_div">
+            <img src="../../public/avatar.jpeg" id="currentPic" alt="">
+        </div>
+
+        <div class="names">
+            <span id="profileName"></span>
+            <button id="edit">Edit<i class="fa-solid fa-pen"></i></button>
+            <br>
+            <span id="userName"></span>
+        </div>
+
+        <p id="bio">Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia placeat earum</p>
+
+        <div class="social_act">
+            <div class="box">
+                <span id="foll_no" class="num_data">1.2K</span>
+                <span id="followers" class="data">Followers</span>
+            </div>
+
+            <div class="box">
+                <span id="follw_no" class="num_data">150</span>
+                <span id="following" class="data">Following</span>
+            </div>
+
+            <div class="box">
+                <span id="posts_no" class="num_data">80</span>
+                <span id="posts" class="data">Posts</span>
+            </div>
+        </div>
+
+        <button id="follow_button">Follow</button>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="../js/profilePage.js"></script>
+</body>
+</html>
